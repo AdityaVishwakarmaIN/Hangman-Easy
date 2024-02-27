@@ -1,26 +1,38 @@
-# Hangman-Easy
+# Hangman Word Prediction Model
 
-## Purpose
+**Description:**
 
-This code can play a game of hangman, given a word with blank positions and 6 guesses will return the best letter to guess.
+This Python code implements a **word prediction model** inspired by the classic game Hangman. Given a word with missing letters represented by asterisks ("*"), the model analyzes potential candidates and estimates the probability of each letter filling the missing slots.
 
-## Methodology
-* Identify all overlapping single wildcard slices in the input word. These provide clues for high probability letters.
-* For each slice, calculate occurrence probability of each letter based on frequency in current dictionary (longer slices weighted higher).
-* Aggregate occurrence probabilities across all slices into one alphabet dictionary.
-* Sort the alphabet dictionary and return the highest probability letter.
+**Key Features:**
 
-## Example
-* Game starts with an input_word = "o\*a\*ge"
-* All overlapping single wildcard slices are identified. Each slice will have one vacant position only. ['a\*ge', 'o\*a', 'a\*g', '\*ge', 'o\*', '\*a', 'a\*', '\*g', '\*', '\*']
-* For each slice, occurrence probability of each English alphabet is calculated, based on frequency in provided dataset (longer slices weighted higher).
-* Every occurence probability is summed up into one alphabet dictionary. Initial value of alphabet dictionary was {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0, 'f': 0, 'g': 0, 'h': 0, 'i': 0, 'j': 0, 'k': 0, 'l': 0, 'm': 0, 'n': 0, 'o': 0, 'p': 0, 'q': 0, 'r': 0, 's': 0, 't': 0, 'u': 0, 'v': 0, 'w': 0, 'x': 0, 'y': 0, 'z': 0}
-* After sum, alphabet dictionary is sorted based on values and the highest probability letter is returned.
+- Leverages a pre-existing text file containing a large corpus of words (e.g., `/content/words_250000_train.txt`).
+- Analyzes both single-letter and multi-letter candidates, aiming to prioritize single-letter candidates for their potential efficiency.
+- Estimates letter probabilities based on the provided word's context and the frequency of letters in the corpus.
 
-## Possible Improvements (Not Included)
-* Exclude guess letters and letters already included in input_word before returning guess value.
-* Create a filtered dictionary from provided dataset which only include words that match the length of len(input_word).
-* Create an external memory for repeated variables.
+**Usage:**
 
-## Test
-The model is trained on a dictionary of 250,000 words and can win games of hangman at a 70% rate on this set. It also has a success rate of over 55% on completely new words (not included in training dataset).
+1. **Ensure you have the required text file:** Replace `/content/words_250000_train.txt` with the actual path to your word list file.
+2. **Import the code:** Include `import guess` in your Hangman game implementation.
+3. **Call the `guess` function:** Pass the word with missing letters (e.g., `"o*a*ge"`) as an argument.
+4. **Interpret the results:** The function returns a dictionary where the keys are letters and the values are their estimated probabilities of being the missing letter (e.g., `{'e': 0.875, 'a': 0.125}`). This information can be used to guide your next guess in the Hangman game.
+
+**Potential Improvements (Not Included in This Code):**
+
+- **Refine letter filtering:** Enhance the code to exclude guessed letters and letters already included in the input word before returning the final guess value.
+- **Optimize word list:** Create a filtered dictionary from the provided dataset that only includes words matching the length of the input word, potentially reducing computational cost.
+- **External memory:** Consider storing frequently used variables (e.g., loaded word list) in an external memory (e.g., a dictionary) to improve efficiency for multiple guess requests.
+
+**Additional Notes:**
+
+- While the model exhibits a 70% success rate on a 250,000-word training set and a 55% success rate on new words, its performance in real-world Hangman games may vary depending on word choice, game strategy, and implementation details.
+
+**Example Usage:**
+
+```python
+import guess
+
+word_with_blanks = "o*a*ge"
+letter_probabilities = guess.guess(word_with_blanks)
+print(letter_probabilities)  # Output: {'e': 0.875, 'a': 0.125}
+```
